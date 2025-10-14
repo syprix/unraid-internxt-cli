@@ -1,17 +1,28 @@
-# Wir starten mit einem offiziellen, Node.js Image
-FROM node:18
+# Wir starten mit einem vollwertigen Debian-Betriebssystem
+FROM debian:bullseye
 
-# Wir setzen ein Arbeitsverzeichnis
-WORKDIR /app
+# Wir installieren grundlegende Werkzeuge, git und curl
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Wir installieren das Internxt CLI-Tool systemweit im Container
+# Wir installieren Node.js v18
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
+
+# Jetzt installieren wir das Internxt CLI-Tool
 RUN npm install -g @internxt/cli
 
-# Wir kopieren unser Start-Skript in den Container
+# Wir setzen unser Arbeitsverzeichnis
+WORKDIR /app
+
+# Wir kopieren unser Start-Skript hinein
 COPY start.sh .
 
 # Wir machen das Skript ausführbar
 RUN chmod +x ./start.sh
 
-# Das ist der Befehl, der ausgeführt wird, wenn der Container startet
+# Das ist der Befehl, der beim Start ausgeführt wird
 CMD ["./start.sh"]
