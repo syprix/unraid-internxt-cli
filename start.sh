@@ -1,32 +1,26 @@
 #!/bin/bash
 
+CONFIG_DIR="/root/.config/internxt-cli"
+
 echo "--- Starting Internxt CLI Service ---"
 
-# Überprüfen, ob die E-Mail-Variable gesetzt ist
-if [ -z "${INTERNXT_EMAIL}" ]; then
-  echo "FEHLER: Die Umgebungsvariable INTERNXT_EMAIL ist nicht gesetzt."
-  exit 1
-fi
+# SCHRITT 1: Das Konfigurationsverzeichnis erstellen (falls es nicht existiert)
+# Das ist der entscheidende neue Schritt, der das Initialisierungsproblem löst.
+echo "Stelle sicher, dass das Konfigurationsverzeichnis existiert: ${CONFIG_DIR}"
+mkdir -p "${CONFIG_DIR}"
 
-# Überprüfen, ob die Passwort-Variable gesetzt ist
-if [ -z "${INTERNXT_PASSWORD}" ]; then
-  echo "FEHLER: Die Umgebungsvariable INTERNXT_PASSWORD ist nicht gesetzt."
-  exit 1
-fi
+# SCHRITT 2: Sicherstellen, dass die Berechtigungen korrekt sind.
+chown -R root:root "${CONFIG_DIR}"
 
+# Erst jetzt, wo alles vorbereitet ist, versuchen wir den Login.
 echo "Logging into Internxt as ${INTERNXT_EMAIL}..."
-
-# Der automatische Login-Versuch
-# Das Passwort wird in Anführungszeichen übergeben, um Sonderzeichen zu schützen
 internxt login --email "${INTERNXT_EMAIL}" --password "${INTERNXT_PASSWORD}"
 
 echo "Enabling WebDAV server..."
-
-# Der WebDAV-Server wird gestartet
 internxt webdav enable --host 0.0.0.0 --port 7111 &
 
 echo "WebDAV server process started."
 echo "--- Service is now running ---"
 
-# Dieser Befehl hält den Container am Leben
+# Hält den Container am Leben
 tail -f /dev/null
