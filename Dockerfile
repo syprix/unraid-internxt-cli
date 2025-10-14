@@ -1,5 +1,5 @@
-# Wir starten mit einem offiziellen, schlanken Node.js Image
-FROM node:18-slim
+# Wir starten mit einem offiziellen, Node.js Image
+FROM node:18
 
 # Wir setzen ein Arbeitsverzeichnis
 WORKDIR /app
