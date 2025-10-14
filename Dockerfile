@@ -26,3 +26,5 @@ RUN chmod +x ./start.sh
 
 # Das ist der Befehl, der beim Start ausgeführt wird
 CMD ["./start.sh"]
+
+# Force clean build
