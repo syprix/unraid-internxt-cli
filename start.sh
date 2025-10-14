@@ -1,24 +1,24 @@
 #!/bin/bash
 
+CONFIG_FILE="/root/.config/internxt-cli/config.json"
+
 echo "--- Starting Internxt CLI Service ---"
 
-if [ -z "${INTERNXT_EMAIL}" ]; then
-  echo "FEHLER: Die Umgebungsvariable INTERNXT_EMAIL ist nicht gesetzt."
-  exit 1
+# Prüfen, ob die Konfigurationsdatei existiert UND ein Login-Token enthält
+if [ -f "$CONFIG_FILE" ] && grep -q "authToken" "$CONFIG_FILE"; then
+  echo "Konfigurationsdatei gefunden. Login-Token erkannt."
+  echo "Starte WebDAV-Server..."
+  internxt webdav enable --host 0.0.0.0 --port 7111 &
+  echo "WebDAV-Server-Prozess gestartet."
+  echo "--- Dienst läuft jetzt ---"
+else
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!! ACHTUNG: KEINE ANMELDUNG GEFUNDEN                       !!"
+  echo "!! Bitte loggen Sie sich manuell über die Konsole ein:    !!"
+  echo "!! > internxt login                                       !!"
+  echo "!! Danach den Container neu starten.                      !!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 fi
 
-if [ -z "${INTERNXT_PASSWORD}" ]; then
-  echo "FEHLER: Die Umgebungsvariable INTERNXT_PASSWORD ist nicht gesetzt."
-  exit 1
-fi
-
-echo "Logging into Internxt as ${INTERNXT_EMAIL}..."
-internxt login --email "${INTERNXT_EMAIL}" --password "${INTERNXT_PASSWORD}"
-
-echo "Login successful. Enabling WebDAV server..."
-internxt webdav enable --host 0.0.0.0 --port 7111 &
-
-echo "WebDAV server process started."
-echo "--- Service is now running ---"
-
+# Dieser Befehl hält den Container am Leben
 tail -f /dev/null
