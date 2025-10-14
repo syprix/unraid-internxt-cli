@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Internxt-CLI-WebDAV</Name>
+  <Repository>syprix/unraid-internxt-cli:latest</Repository>
+  <Registry>https://hub.docker.com/r/syprix/unraid-internxt-cli</Registry>
+  <Network>br0</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/syprix/unraid-internxt-cli/issues</Support>
+  <Project>https://internxt.com/</Project>
+  <Overview>This container provides a stable and configurable WebDAV server for your Internxt Drive, built from the official Internxt CLI. It allows you to use tools like rclone to access your files. Created for the Unraid community.</Overview>
+  <Category>Cloud: Network:Proxy</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/syprix/unraid-internxt-cli/main/internxt-cli.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/internxt/brand-assets/main/logo/2-logo-icon/internxt-logo-icon-blue.png</Icon>
+  <Config Name="IP Address" Target="MyIP" Default="" Description="Enter a static IP for your container here." Type="Variable" Display="always" Required="true"/>
+  <Config Name="WebDAV Port" Target="7111" Default="7111" Mode="tcp" Description="The port for the WebDAV service. Should not be changed." Type="Port" Display="advanced" Required="true">7111</Config>
+  <Config Name="Appdata" Target="/root/.config/internxt-cli" Default="/mnt/user/appdata/Internxt-CLI-WebDAV" Mode="rw" Description="This is where the container stores its persistent configuration file." Type="Path" Display="advanced" Required="true"/>
+  <Config Name="Email" Target="INTERNXT_EMAIL" Default="" Description="Your Internxt account email address." Type="Variable" Display="always" Required="true"/>
+  <Config Name="Password" Target="INTERNXT_PASSWORD" Default="" Description="Your Internxt account password." Type="Variable" Display="always" Required="true" Mask="true"/>
+</Container>
