@@ -1,7 +1,7 @@
-# Wir starten mit einem vollwertigen Debian-Betriebssystem
+# Base image: Use a full Debian OS for maximum compatibility.
 FROM debian:bullseye
 
-# Wir installieren grundlegende Werkzeuge
+# Install essential dependencies for building, networking, and diagnostics.
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
@@ -10,21 +10,21 @@ RUN apt-get update && apt-get install -y \
     openssl \
     && rm -rf /var/lib/apt/lists/*
 
-# Wir installieren Node.js v18
+# Install Node.js v18, which is required by the CLI.
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 
-# Jetzt installieren wir Version 1.5.6 oder neuere PATCH-Versionen
+# Install a specific, known-stable version range of the Internxt CLI tool.
 RUN npm install -g @internxt/cli@~1.5.6
 
-# Wir setzen unser Arbeitsverzeichnis
+# Set the working directory inside the container.
 WORKDIR /app
 
-# Wir kopieren unser Start-Skript hinein
+# Copy the start script into the working directory.
 COPY start.sh .
 
-# Wir machen das Skript ausführbar
+# Make the start script executable.
 RUN chmod +x ./start.sh
 
-# Das ist der Befehl, der beim Start ausgeführt wird
+# Define the default command to run when the container starts.
 CMD ["./start.sh"]
