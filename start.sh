@@ -30,22 +30,19 @@ if ping -c 4 -W 10 "${PING_TARGET}"; then
     if [ $? -eq 0 ]; then
       echo "✅ LOGIN SUCCESSFUL."
       
-      # --- 4. Start WebDAV server with PM2 Supervisor ---
+      # --- 4. Configure and Start WebDAV server with PM2 Supervisor ---
+      echo "Configuring WebDAV server to listen on 0.0.0.0:7111..."
+      internxt webdav config --host 0.0.0.0 --port 7111
+
       echo "Starting WebDAV server with PM2 Supervisor to ensure stability..."
       INTERNXT_EXEC_PATH=$(which internxt)
       
-      # This command starts the WebDAV service and keeps the container running.
-      # PM2 will automatically restart the service if it crashes.
+      # This command starts the WebDAV service via PM2 and keeps the container running.
       pm2-runtime start ${INTERNXT_EXEC_PATH} --name "internxt-webdav" -- \
-        webdav enable --host 0.0.0.0 --port 7111
-        
-      # This part will only be reached if pm2-runtime itself fails to start.
-      echo "❌ FATAL ERROR: PM2 failed to start."
-      tail -f /dev/null
+        webdav enable
 
     else
-      echo "❌ ERROR: The 'internxt login' command failed, despite a valid connection to the correct server."
-      echo "This indicates a bug within the internxt-cli tool itself."
+      echo "❌ ERROR: The 'internxt login' command failed."
     fi
   else
     echo "❌ ERROR: INVALID CERTIFICATE! Could not verify server identity."
@@ -54,6 +51,6 @@ else
   echo "❌ ERROR: PING FAILED. No internet connection!"
 fi
 
-echo "--- Diagnosis complete. If the service did not start, check the errors above. ---"
-# Keep the container alive for log inspection in case of failure.
+# This part will only be reached if the pm2-runtime command fails or if any previous check fails.
+echo "--- Script finished. Check logs for status. ---"
 tail -f /dev/null
