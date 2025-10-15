@@ -1,11 +1,12 @@
 # Wir starten mit einem vollwertigen Debian-Betriebssystem
 FROM debian:bullseye
 
-# Wir installieren grundlegende Werkzeuge, git und curl
+# Wir installieren grundlegende Werkzeuge, git, curl UND das Ping-Tool
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     curl \
+    iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # Wir installieren Node.js v18
@@ -26,5 +27,3 @@ RUN chmod +x ./start.sh
 
 # Das ist der Befehl, der beim Start ausgeführt wird
 CMD ["./start.sh"]
-
-# Force clean build
