@@ -19,4 +19,5 @@
   <Config Name="Appdata" Target="/root/.config/internxt-cli" Default="/mnt/user/appdata/Internxt-CLI-WebDAV" Mode="rw" Description="This is where the container stores its persistent configuration file." Type="Path" Display="advanced" Required="true"/>
   <Config Name="Email" Target="INTERNXT_EMAIL" Default="" Description="Your Internxt account email address." Type="Variable" Display="always" Required="true"/>
   <Config Name="Password" Target="INTERNXT_PASSWORD" Default="" Description="Your Internxt account password." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="DNS Server" Target="--dns" Default="8.8.8.8" Description="Sets a specific DNS server for the container to solve name resolution issues. Default is Google DNS." Type="Variable" Display="advanced" Required="false"/>
 </Container>
