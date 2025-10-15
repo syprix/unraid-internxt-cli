@@ -1,12 +1,13 @@
 # Wir starten mit einem vollwertigen Debian-Betriebssystem
 FROM debian:bullseye
 
-# Wir installieren grundlegende Werkzeuge, git, curl UND das Ping-Tool
+# Wir installieren grundlegende Werkzeuge, git, curl, das Ping-Tool UND das SSL-Tool
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     curl \
     iputils-ping \
+    openssl \
     && rm -rf /var/lib/apt/lists/*
 
 # Wir installieren Node.js v18
