@@ -14,11 +14,8 @@ if ping -c 4 -W 10 "${PING_TARGET}"; then
 
   # --- 2. Server Identity Verification (SSL Certificate Check) ---
   echo "Verifying identity of ${API_HOST}..."
-  
-  # Extract the subject name from the SSL certificate.
   CERT_SUBJECT=$(openssl s_client -connect ${API_HOST}:443 -servername ${API_HOST} 2>/dev/null <<< "Q" | openssl x509 -noout -subject)
 
-  # Check if the certificate's Common Name (CN) matches the expected host.
   if [[ "${CERT_SUBJECT}" == *"CN = ${API_HOST}"* ]]; then
     echo "✅ CERTIFICATE VALID. Connected to the authentic Internxt server."
     
@@ -30,27 +27,33 @@ if ping -c 4 -W 10 "${PING_TARGET}"; then
     echo "Attempting automatic login..."
     internxt login --email "${INTERNXT_EMAIL}" --password "${INTERNXT_PASSWORD}"
 
-    # Check if the login command was successful.
     if [ $? -eq 0 ]; then
-      echo "✅ LOGIN SUCCESSFUL. Starting WebDAV server..."
-      internxt webdav enable --host 0.0.0.0 --port 7111 &
-      echo "WebDAV server process started. Service is now active."
+      echo "✅ LOGIN SUCCESSFUL."
+      
+      # --- 4. Start WebDAV server with PM2 Supervisor ---
+      echo "Starting WebDAV server with PM2 Supervisor to ensure stability..."
+      INTERNXT_EXEC_PATH=$(which internxt)
+      
+      # This command starts the WebDAV service and keeps the container running.
+      # PM2 will automatically restart the service if it crashes.
+      pm2-runtime start ${INTERNXT_EXEC_PATH} --name "internxt-webdav" -- \
+        webdav enable --host 0.0.0.0 --port 7111
+        
+      # This part will only be reached if pm2-runtime itself fails to start.
+      echo "❌ FATAL ERROR: PM2 failed to start."
+      tail -f /dev/null
+
     else
       echo "❌ ERROR: The 'internxt login' command failed, despite a valid connection to the correct server."
       echo "This indicates a bug within the internxt-cli tool itself."
     fi
-
   else
-    echo "❌ ERROR: INVALID CERTIFICATE!"
-    echo "The server at ${API_HOST} did not provide a valid certificate."
-    echo "Received certificate subject: ${CERT_SUBJECT}"
+    echo "❌ ERROR: INVALID CERTIFICATE! Could not verify server identity."
   fi
-
 else
   echo "❌ ERROR: PING FAILED. No internet connection!"
-  echo "Please check the container's network settings."
 fi
 
-echo "--- Diagnosis complete. Service is running in analysis mode. ---"
-# Keep the container running to allow log inspection.
+echo "--- Diagnosis complete. If the service did not start, check the errors above. ---"
+# Keep the container alive for log inspection in case of failure.
 tail -f /dev/null
