@@ -1,7 +1,7 @@
 # Wir starten mit einem vollwertigen Debian-Betriebssystem
 FROM debian:bullseye
 
-# Wir installieren grundlegende Werkzeuge, git, curl, das Ping-Tool UND das SSL-Tool
+# Wir installieren grundlegende Werkzeuge
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 
-# Jetzt installieren wir das Internxt CLI-Tool
-RUN npm install -g @internxt/cli
+# Jetzt installieren wir Version 1.5.6 oder neuere PATCH-Versionen
+RUN npm install -g @internxt/cli@~1.5.6
 
 # Wir setzen unser Arbeitsverzeichnis
 WORKDIR /app
