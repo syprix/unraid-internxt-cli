@@ -8,14 +8,15 @@ RUN apt-get update && apt-get install -y \
     curl \
     iputils-ping \
     openssl \
+    net-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js v18, which is required by the CLI.
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 
-# Install a specific, known-stable version range of the Internxt CLI tool.
-RUN npm install -g @internxt/cli@~1.5.6
+# Install a specific, known-stable version range of the Internxt CLI and the PM2 process manager.
+RUN npm install -g @internxt/cli@~1.5.6 pm2
 
 # Set the working directory inside the container.
 WORKDIR /app
