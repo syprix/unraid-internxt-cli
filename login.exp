@@ -1,0 +1,18 @@
+#!/usr/bin/expect -f
+
+# Set a timeout for prompts
+set timeout 20
+
+# Start the internxt login process
+spawn internxt login
+
+# Expect the email prompt and send the email from the environment variable
+expect "What is your email?"
+send "$env(INTERNXT_EMAIL)\r"
+
+# Expect the password prompt and send the password from the environment variable
+expect "What is your password?"
+send "$env(INTERNXT_PASSWORD)\r"
+
+# Wait for the command to finish
+expect eof
