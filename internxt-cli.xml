@@ -14,10 +14,10 @@
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/syprix/unraid-internxt-cli/main/internxt-cli.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/internxt/brand-assets/main/logo/2-logo-icon/internxt-logo-icon-blue.png</Icon>
+  <ExtraParams>--dns=8.8.8.8</ExtraParams>
   <Config Name="IP Address" Target="MyIP" Default="" Description="Enter a static IP for your container here." Type="Variable" Display="always" Required="true"/>
   <Config Name="WebDAV Port" Target="7111" Default="7111" Mode="tcp" Description="The port for the WebDAV service. Should not be changed." Type="Port" Display="advanced" Required="true">7111</Config>
   <Config Name="Appdata" Target="/root/.config/internxt-cli" Default="/mnt/user/appdata/Internxt-CLI-WebDAV" Mode="rw" Description="This is where the container stores its persistent configuration file." Type="Path" Display="advanced" Required="true"/>
   <Config Name="Email" Target="INTERNXT_EMAIL" Default="" Description="Your Internxt account email address." Type="Variable" Display="always" Required="true"/>
   <Config Name="Password" Target="INTERNXT_PASSWORD" Default="" Description="Your Internxt account password." Type="Variable" Display="always" Required="true" Mask="true"/>
-  <Config Name="DNS Server" Target="--dns" Default="8.8.8.8" Description="Sets a specific DNS server for the container to solve name resolution issues. Default is Google DNS." Type="Variable" Display="advanced" Required="false"/>
 </Container>
