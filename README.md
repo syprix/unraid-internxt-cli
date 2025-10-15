@@ -36,5 +36,3 @@ This template was built from the ground up to be:
 * **Robust:** The container is built on a full Debian image with all necessary dependencies, avoiding runtime errors.
 * **Automated:** The login process is handled automatically on startup.
 * **Diagnosable:** The start-up script includes clear logging for internet connection tests (Ping) and server handshake verification (SSL Certificate Check) to make troubleshooting easy.
-
-This project was a collaborative effort.
