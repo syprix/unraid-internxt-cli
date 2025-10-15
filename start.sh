@@ -28,7 +28,7 @@ if ping -c 4 -W 10 "${PING_TARGET}"; then
 else
   echo "❌ FEHLER: Keine Internetverbindung!"
   echo "Der Ping an ${PING_TARGET} ist fehlgeschlagen."
-  echo "Bitte prüfen Sie die Netzwerkeinstellungen des Containers (IP, Gateway, DNS)."
+  echo "Der Container hat keine funktionierende Verbindung zum Internet."
 fi
 
 # Hält den Container am Leben, damit wir die Logs lesen können
