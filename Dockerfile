@@ -1,7 +1,7 @@
 # Base image: Use a full Debian OS for maximum compatibility.
 FROM debian:bullseye
 
-# Install essential dependencies for building, networking, and diagnostics.
+# Install essential dependencies, including the 'expect' tool for automation.
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
@@ -9,23 +9,26 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     openssl \
     net-tools \
+    expect \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js v18, which is required by the CLI.
+# Install Node.js v18.
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 
-# Install a specific, known-stable version range of the Internxt CLI and the PM2 process manager.
-RUN npm install -g @internxt/cli@~1.5.6 pm2
+# Install a specific, known-stable version range of the Internxt CLI.
+RUN npm install -g @internxt/cli@~1.5.6
 
-# Set the working directory inside the container.
+# Set the working directory.
 WORKDIR /app
 
-# Copy the start script into the working directory.
+# Copy both the main start script and the new automation script.
 COPY start.sh .
+COPY login.exp .
 
-# Make the start script executable.
+# Make both scripts executable.
 RUN chmod +x ./start.sh
+RUN chmod +x ./login.exp
 
 # Define the default command to run when the container starts.
 CMD ["./start.sh"]
