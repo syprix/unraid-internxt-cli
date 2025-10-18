@@ -1,29 +1,26 @@
 name: Build and Push Docker Image
 
 on:
-  # Dieser Workflow startet automatisch, wenn du Änderungen an deinem Projekt vornimmst
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ] # This line ensures builds trigger for both branches
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Schritt 1: Das Repository auschecken
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Schritt 2: Bei Docker Hub anmelden (hier werden unsere geheimen Schlüssel benutzt)
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKOCKERHUB_USERNAME }} # Double-check secret name
+          password: ${{ secrets.DOCKERHUB_TOKEN }}    # Double-check secret name
 
-      # Schritt 3: Das Docker-Image bauen und auf Docker Hub hochladen
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
+          # This builds and tags the image as 'latest' regardless of the branch
           tags: syprix/unraid-internxt-cli:latest
