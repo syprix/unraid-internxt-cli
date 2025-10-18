@@ -8,13 +8,12 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/syprix/unraid-internxt-cli/issues</Support>
   <Project>https://internxt.com/</Project>
-  <Overview>This container provides a stable and configurable WebDAV server for your Internxt Drive, built from the official Internxt CLI. It allows you to use tools like rclone to access your files. Created for the Unraid community.</Overview>
+  <Overview>This container provides a stable WebDAV server for Internxt Drive using Auth Token authentication. Find your Auth Token via browser developer tools during login on the Internxt website.</Overview>
   <Category>Cloud: Network:Proxy</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/syprix/unraid-internxt-cli/main/internxt-cli.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/internxt/brand-assets/main/logo/2-logo-icon/internxt-logo-icon-blue.png</Icon>
-  <Config Name="WebDAV Port" Target="7111" Default="7111" Mode="tcp" Description="The port for the WebDAV service. This must be mapped." Type="Port" Display="always" Required="true"/>
-  <Config Name="Appdata" Target="/root/.config/internxt-cli" Default="/mnt/user/appdata/Internxt-CLI-WebDAV" Mode="rw" Description="This is where the container stores its persistent configuration file." Type="Path" Display="advanced" Required="true"/>
-  <Config Name="Email" Target="INTERNXT_EMAIL" Default="" Description="Your Internxt account email address." Type="Variable" Display="always" Required="true"/>
-  <Config Name="Password" Target="INTERNXT_PASSWORD" Default="" Description="Your Internxt account password." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="WebDAV Port" Target="9192" Default="9192" Mode="tcp" Description="The external port for the WebDAV service. Change this if the port is already in use." Type="Port" Display="always" Required="true"/>
+  <Config Name="Config Path" Target="/config" Default="/mnt/user/appdata/Internxt-CLI-WebDAV" Mode="rw" Description="This is where the container stores its persistent configuration file." Type="Path" Display="advanced" Required="true"/>
+  <Config Name="Auth Token" Target="INTERNXT_AUTH_TOKEN" Default="" Description="Required: Your Internxt Auth Token (find via browser dev tools)." Type="Variable" Display="always" Required="true" Mask="true"/>
 </Container>
